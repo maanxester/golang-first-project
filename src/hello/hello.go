@@ -66,24 +66,27 @@ func main() {
 
 
 	exibeIntroducao()
-	exibeMenu()
+	for {
+		exibeMenu()
 
 
-	comando := leComando()
+		comando := leComando()
 
-	switch comando {
-	case 1:
-		iniciarMonitoramento()
-	case 2:
-		fmt.Println("Exibindo Logs")
-	case 0:
-		fmt.Println("Saindo...")
-		os.Exit(0)
-	default:
-		fmt.Println("Erro")
-		os.Exit(-1) // -1 representa algo inesperado e informa ao S.O
+		switch comando {
+		case 1:
+			iniciarMonitoramento()
+		case 2:
+			fmt.Println("Exibindo Logs")
+		case 0:
+			fmt.Println("Saindo...")
+			os.Exit(0)
+		default:
+			fmt.Println("Erro")
+			os.Exit(-1) // -1 representa algo inesperado e informa ao S.O
+		}
 	}
 }
+
 
 // Caso eu queira retornar dois valores, é necessário eu colocar ao lado da função, o tipo dos dois valores
 // Exemplo: func devolveNomeEIdade() (string, int) { code...
@@ -125,7 +128,12 @@ func exibeMenu() {
  // Função que retorna o Get de uma página descobrindo se ela está on ou off
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	site := "https://www.alura.com.br"
+	site := "https://www.google.com.br"
 	resp, _ := http.Get(site)
-	fmt.Println(resp)
+
+	if resp.StatusCode == 200 {
+		fmt.Println(site, "está no ar.")
+	}else {
+		fmt.Println(site, "não retornou o status de sucesso. Status Code:", resp.StatusCode)
+	}
 }
