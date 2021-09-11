@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	//"reflect"
 )
 
 func main() {
@@ -65,7 +66,12 @@ func main() {
 	//fmt.Println(nome)
 
 
+	slice()
+	//array()
 	exibeIntroducao()
+
+
+	// Enquanto for True, esse for irá executar sempre
 	for {
 		exibeMenu()
 
@@ -123,6 +129,47 @@ func exibeMenu() {
 	fmt.Println("2 - Exibir Logs")
 	fmt.Println("0 - Sair")
 }
+
+// Array OBS: Não muito usado
+// Dessa forma de array, é necessário passar a quantidade de arrays que serão listados, por exemplo como foi feito:
+// var nomes [4] string
+// Tamanho fixo
+func array() {
+	var nomes [4] string
+		nomes[0] = "Jorge"
+		nomes[1] = "Maria"
+		nomes[3] = "Matheus"
+
+		fmt.Println(nomes)
+}
+
+
+// Slice
+// No Slice, não é necessário informar quantos itens serão listados na variavel
+// Tamanho dinamico
+// Porém, com capacidade dobrada
+func slice() {
+	nomes := [] string{"Matheus", "Jorge", "Lucas"}
+	// Append
+	nomes = append(nomes, "Maria")
+
+
+	 // For sem range
+	for i := 0 ; 1 < len(nomes); i++ {
+		fmt.Println(nomes[i])
+	}
+
+	// For com o range
+	for i, nome  := range nomes {
+		fmt.Println("Na posição", i, "tem o nome:", nome)
+	}
+
+}
+
+// função len(variavel) para consultar tamanho
+// função cap(variavel) para consultar capacidade
+
+
 
 
  // Função que retorna o Get de uma página descobrindo se ela está on ou off
