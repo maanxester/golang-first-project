@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -56,13 +57,23 @@ func main() {
 	//var comando int = leComando()
 
 
+
+	// Quando a função retorna dois valores, é necessário passar duas variaveis
+	// Exemplo: caso a função retorne a idade e o nome, vai ser necessário escrever:
+	// nome, idade := devolveNomeEIdade()
+	//nome := devolveNome()
+	//fmt.Println(nome)
+
+
 	exibeIntroducao()
 	exibeMenu()
+
+
 	comando := leComando()
 
 	switch comando {
 	case 1:
-		fmt.Println("Monitorando...")
+		iniciarMonitoramento()
 	case 2:
 		fmt.Println("Exibindo Logs")
 	case 0:
@@ -73,6 +84,20 @@ func main() {
 		os.Exit(-1) // -1 representa algo inesperado e informa ao S.O
 	}
 }
+
+// Caso eu queira retornar dois valores, é necessário eu colocar ao lado da função, o tipo dos dois valores
+// Exemplo: func devolveNomeEIdade() (string, int) { code...
+
+// Caso tenha uma função que retorne dois valores e eu queria apenas um único valor, posso fazer o seguinte:
+// chamar a minha função que retorna dois valores, e quando eu declarar minha variavel, eu passo na seguinte forma:
+// _, idade := NOMEDAFUNÇÃO
+// devo passar este underline na variavel que não quero pegar.
+//func devolveNome() string {
+//	nome := "Matheus"
+//	return nome
+//}
+
+
 
 func exibeIntroducao() {
 	nome := "Matheus"
@@ -86,7 +111,7 @@ func exibeIntroducao() {
 func leComando() int {
 	var comandoLido int
 	fmt.Scan(&comandoLido)
-	fmt.Println("O endereço de memoria da varial comando é", &comandoLido)
+	//fmt.Println("O endereço de memoria da varial comando é", &comandoLido)
 	return comandoLido
 }
 
@@ -94,4 +119,13 @@ func exibeMenu() {
 	fmt.Println("1 - Iniciar Monitoramento")
 	fmt.Println("2 - Exibir Logs")
 	fmt.Println("0 - Sair")
+}
+
+
+ // Função que retorna o Get de uma página descobrindo se ela está on ou off
+func iniciarMonitoramento() {
+	fmt.Println("Monitorando...")
+	site := "https://www.alura.com.br"
+	resp, _ := http.Get(site)
+	fmt.Println(resp)
 }
