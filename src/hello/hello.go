@@ -181,8 +181,13 @@ func array() {
  // Função que retorna o Get de uma página descobrindo se ela está on ou off
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	sites := []string{"https://www.google.com.br", "https://www.facebook.com/5324432",
-		"https://www.alura.com.br"}
+
+
+	//sites := []string{"https://www.google.com.br", "https://www.facebook.com/5324432",
+	//	"https://www.alura.com.br"}
+
+
+	sites := leSitesArquivo()
 
 	for i := 0; i < monitoramentoSite ; i++ {
 		for i, site := range sites {
@@ -201,4 +206,14 @@ func testaSite(site string) { // <- Dessa forma se passa um dado que será receb
 	}else {
 		fmt.Println(site, "não retornou o status de sucesso. Status Code:", resp.StatusCode)
 	}
+}
+
+
+func leSitesArquivo() []string {
+
+	var sites []string
+
+	arquivo, _ := os.Open("sites.txt") // Ficar atento, sempre é necessário tratar os erros
+	fmt.Println(arquivo)
+	return sites
 }
