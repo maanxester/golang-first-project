@@ -5,8 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 	//"reflect"
 )
+
+const monitoramentoSite = 5 // Constante são "variáveis" imutáveis.
+const delay = 5
+
+
 
 func main() {
 
@@ -66,7 +72,7 @@ func main() {
 	//fmt.Println(nome)
 
 
-	slice()
+	//slice()
 	//array()
 	exibeIntroducao()
 
@@ -148,23 +154,23 @@ func array() {
 // No Slice, não é necessário informar quantos itens serão listados na variavel
 // Tamanho dinamico
 // Porém, com capacidade dobrada
-func slice() {
-	nomes := [] string{"Matheus", "Jorge", "Lucas"}
-	// Append
-	nomes = append(nomes, "Maria")
-
-
-	 // For sem range
-	for i := 0 ; 1 < len(nomes); i++ {
-		fmt.Println(nomes[i])
-	}
-
-	// For com o range
-	for i, nome  := range nomes {
-		fmt.Println("Na posição", i, "tem o nome:", nome)
-	}
-
-}
+//func slice() {
+//	nomes := [] string{"Matheus", "Jorge", "Lucas"}
+//	// Append
+//	nomes = append(nomes, "Maria")
+//
+//
+//	 // For sem range
+//	for i := 0 ; 1 < len(nomes); i++ {
+//		fmt.Println(nomes[i])
+//	}
+//
+//	// For com o range
+//	for i, nome  := range nomes {
+//		fmt.Println("Na posição", i, "tem o nome:", nome)
+//	}
+//
+//}
 
 // função len(variavel) para consultar tamanho
 // função cap(variavel) para consultar capacidade
@@ -175,7 +181,19 @@ func slice() {
  // Função que retorna o Get de uma página descobrindo se ela está on ou off
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	site := "https://www.google.com.br"
+	sites := []string{"https://www.google.com.br", "https://www.facebook.com/5324432",
+		"https://www.alura.com.br"}
+
+	for i := 0; i < monitoramentoSite ; i++ {
+		for i, site := range sites {
+			fmt.Println("Testando site", i, ":", site)
+			testaSite(site)
+		}
+		time.Sleep(delay * time.Second) //
+	}
+}
+
+func testaSite(site string) { // <- Dessa forma se passa um dado que será recebido na chamada da função
 	resp, _ := http.Get(site)
 
 	if resp.StatusCode == 200 {
