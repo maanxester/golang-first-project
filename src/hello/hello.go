@@ -199,7 +199,11 @@ func iniciarMonitoramento() {
 }
 
 func testaSite(site string) { // <- Dessa forma se passa um dado que será recebido na chamada da função
-	resp, _ := http.Get(site)
+	resp, err := http.Get(site)
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
 
 	if resp.StatusCode == 200 {
 		fmt.Println(site, "está no ar.")
@@ -213,7 +217,12 @@ func leSitesArquivo() []string {
 
 	var sites []string
 
-	arquivo, _ := os.Open("sites.txt") // Ficar atento, sempre é necessário tratar os erros
+	arquivo, err := os.Open("sites.txt") // Ficar atento, sempre é necessário tratar os erros
+
+	if err != nil {
+		fmt.Print("Ocorreu um erro:", err)
+	}
+
 	fmt.Println(arquivo)
 	return sites
 }
