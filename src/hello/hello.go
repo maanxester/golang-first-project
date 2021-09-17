@@ -3,10 +3,15 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"strings"
+
+	//"io/ioutil"
 	"net/http"
 	"os"
 	"time"
 	//"reflect"
+	"bufio"
 )
 
 const monitoramentoSite = 5 // Constante são "variáveis" imutáveis.
@@ -182,10 +187,8 @@ func array() {
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
 
-
 	//sites := []string{"https://www.google.com.br", "https://www.facebook.com/5324432",
 	//	"https://www.alura.com.br"}
-
 
 	sites := leSitesArquivo()
 
@@ -217,12 +220,32 @@ func leSitesArquivo() []string {
 
 	var sites []string
 
-	arquivo, err := os.Open("sites.txt") // Ficar atento, sempre é necessário tratar os erros
+	//arquivo, err := os.Open("sites.txt") // Ficar atento, sempre é necessário tratar os erros
+	//arquivo, err := ioutil.ReadFile("sites.txt") // Retorna um array de bytes, sendo necessário convertê-lo
+
+	arquivo, err := os.Open("sites.txt")
 
 	if err != nil {
 		fmt.Print("Ocorreu um erro:", err)
 	}
 
-	fmt.Println(arquivo)
+	leitor := bufio.NewReader(arquivo)
+
+	for {
+		linha, err := leitor.ReadString('\n') // Transformará o conteudo armazenado no endereço de memória em uma string.
+		linha = strings.TrimSpace(linha) // Quando já tenho uma variável declarada, e quero chamar ela, não é necessário
+										// declarar com o := novamente.
+		sites = append(sites, linha)
+
+		if err == io.EOF {
+			fmt.Println("O leitor chegou no fim da linha")
+			break
+		}
+	}
+	//fmt.Println(string(arquivo)) // Realizando a conversão do array de bytes
+
+	arquivo.Close() // Boa prática, pois, foi utilizado o os.Open, e é necessário fecha-lo para ser mais amigavel com o OS.
+
+
 	return sites
 }
