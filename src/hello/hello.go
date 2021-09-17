@@ -4,6 +4,9 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
+	"log"
+	"strconv"
 	"strings"
 
 	//"io/ioutil"
@@ -94,6 +97,7 @@ func main() {
 			iniciarMonitoramento()
 		case 2:
 			fmt.Println("Exibindo Logs")
+			imprimeLogs()
 		case 0:
 			fmt.Println("Saindo...")
 			os.Exit(0)
@@ -205,13 +209,15 @@ func testaSite(site string) { // <- Dessa forma se passa um dado que será receb
 	resp, err := http.Get(site)
 
 	if err != nil {
-		fmt.Println("Ocorreu um erro:", err)
+		log.Fatal("Ocorreu um erro:", err)
 	}
 
 	if resp.StatusCode == 200 {
 		fmt.Println(site, "está no ar.")
+		registraLog(site, true)
 	}else {
 		fmt.Println(site, "não retornou o status de sucesso. Status Code:", resp.StatusCode)
+		registraLog(site, false)
 	}
 }
 
@@ -226,12 +232,12 @@ func leSitesArquivo() []string {
 	arquivo, err := os.Open("sites.txt")
 
 	if err != nil {
-		fmt.Print("Ocorreu um erro:", err)
+		log.Fatal("Ocorreu um erro:", err)
 	}
 
 	leitor := bufio.NewReader(arquivo)
 
-	for {
+	for {											// \n representa uma quebra de linha dentro do arquivo .txt
 		linha, err := leitor.ReadString('\n') // Transformará o conteudo armazenado no endereço de memória em uma string.
 		linha = strings.TrimSpace(linha) // Quando já tenho uma variável declarada, e quero chamar ela, não é necessário
 										// declarar com o := novamente.
@@ -248,4 +254,28 @@ func leSitesArquivo() []string {
 
 
 	return sites
+}
+
+func registraLog(site string, status bool) {
+	arquivo, err := os.OpenFile("logs.txt", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+
+	if err != nil {
+		log.Fatal("Ocorreu um erro:", err)
+	}
+
+	arquivo.WriteString(time.Now().Format("02/01/2016 15:04:06") + " - " + site + "- online: " +
+		strconv.FormatBool(status) + "\n") // Biblioteca strconv que basicamente faz a conversão para qualquer tipo
+
+	arquivo.Close()
+
+}
+
+func imprimeLogs() {
+	arquivo, err := ioutil.ReadFile("logs.txt")
+
+	if err != nil {
+		log.Fatal("Ocorreu um erro:", err)
+	}
+
+	fmt.Println(string(arquivo))
 }
